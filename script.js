@@ -22,22 +22,30 @@ const updatePaginationDiv = (currentPage, numPages) => {
   const paginationList = $('<ul>').addClass('pagination justify-content-center');
 
   const prevButton = createPaginationButton("Previous", currentPage > 1, () => changePage(currentPage - 1));
+  if (currentPage === 1) {
+    prevButton.hide();
+  }
   paginationList.append(prevButton);
 
   const startPage = Math.max(1, currentPage - 2);
   const endPage = Math.min(startPage + 4, numPages);
 
   for (let i = startPage; i <= endPage; i++) {
-    const pageButton = createPaginationButton(i, i !== currentPage, () => changePage(i), i === currentPage);
+    const pageButton = createPaginationButton(i, i !== currentPage, () => changePage(i));
+    if (i === currentPage) {
+      pageButton.addClass('current-page');
+    }
     paginationList.append(pageButton);
   }
 
   const nextButton = createPaginationButton("Next", currentPage < numPages, () => changePage(currentPage + 1));
+  if (currentPage === numPages) {
+    nextButton.hide();
+  }
   paginationList.append(nextButton);
 
   $('#pagination').append(paginationList);
 };
-
 
 function changePage(page) {
   currentPage = page;
