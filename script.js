@@ -4,6 +4,18 @@ let pokemons = []
 
 
 function createPaginationButton(text, enabled, onClick, isCurrentPage = false) {
+
+  const updatePokemonCount = (currentPage, PAGE_SIZE, totalPokemons) => {
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const endIndex = Math.min(startIndex + PAGE_SIZE, totalPokemons.length);
+    const displayedCount = endIndex - startIndex;
+    
+    // $('#pokemonCount').text(`Total Pokémon: ${totalPokemons.length}`);
+    $('#displayedCount').text(`Showing ${displayedCount} of ${totalPokemons.length} Pokémon`);
+  };
+  
+  updatePokemonCount(currentPage, PAGE_SIZE, pokemons);
+  
   const button = $('<li>').addClass('page-item');
   const link = $('<a>').addClass('page-link').text(text).on('click', onClick);
   if (!enabled) {
@@ -77,7 +89,6 @@ const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
 
 const setup = async () => {
   // test out poke api using axios here
-
 
   $('#pokeCards').empty()
   let response = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810');
