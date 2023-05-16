@@ -118,9 +118,72 @@ const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
   }
 }
 
+const fetchPokemonTypes = async () => {
+  try {
+    const response = await axios.get('https://pokeapi.co/api/v2/type/');
+    const types = response.data.results;
+    createTypeCheckboxes(types);
+  } catch (error) {
+    console.error('Error fetching Pokémon types:', error);
+  }
+};
+
+const createTypeCheckboxes = (types) => {
+  const typeContainer = $('#typeContainer');
+  typeContainer.empty();
+
+  for (const type of types) {
+    const checkbox = $('<input>')
+      .attr('type', 'checkbox')
+      .attr('id', type.name)
+      .addClass('type-checkbox')
+      .on('change', filterPokemonByType);
+
+    const label = $('<label>')
+      .attr('for', type.name)
+      .text(type.name);
+
+    typeContainer.append(checkbox, label);
+  }
+};
+
+const fetchPokemonsByType = async (type) => {
+  try {
+    const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
+    const pokemons = response.data.pokemon.map((entry) => entry.pokemon);
+    return pokemons;
+  } catch (error) {
+    console.error(`Error fetching Pokémon of type ${type}:`, error);
+    return [];
+  }
+};
+
+const filterPokemonByType = async () => {
+  const checkedTypes = $('.type-checkbox:checked').map(function () {
+    return this.id;
+  }).get();
+
+  const filteredPokemon = [];
+
+  for (const type of checkedTypes) {
+    const pokemons = await fetchPokemonsByType(type);
+    filteredPokemon.push(...pokemons);
+  }
+
+  pokemons = filteredPokemon; // Update the global pokemons array with the filtered data
+
+  currentPage = 1; // Reset the current page to 1
+  paginate(currentPage, PAGE_SIZE, pokemons);
+  const numPages = Math.ceil(pokemons.length / PAGE_SIZE);
+  updatePaginationDiv(currentPage, numPages);
+};
+
 
 const setup = async () => {
   // test out poke api using axios here
+
+    // Fetch all Pokémon types
+    await fetchPokemonTypes();
 
   $('#pokeCards').empty()
   let response = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810');
@@ -173,16 +236,14 @@ const setup = async () => {
         `)
   })
 
-  // add event listener to pagination buttons
-  $('body').on('click', ".numberedButtons", async function (e) {
-    currentPage = Number(e.target.value)
-    paginate(currentPage, PAGE_SIZE, pokemons)
+  // Add event listener to pagination buttons
+  $('body').on('click', '.numberedButtons', async function (e) {
+    currentPage = Number(e.target.value);
+    paginate(currentPage, PAGE_SIZE, pokemons); // Use the global pokemons array
+    updatePaginationDiv(currentPage, Math.ceil(pokemons.length / PAGE_SIZE));
+  });
 
-    //update pagination buttons
-    updatePaginationDiv(currentPage, numPages)
-  })
-
-}
+};
 
 
 $(document).ready(setup)
