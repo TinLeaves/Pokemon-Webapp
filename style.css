@@ -27,6 +27,17 @@
     color: white; 
   }
   
+  #typeContainer {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    grid-gap: 5px;
+    padding: 5px;
+  }
+  
+  .type-checkbox {
+    display: flex;
+    align-items: center;
+  }
   
   
   
