@@ -19,7 +19,8 @@ The development of this project was influenced by the following repositories:
 
 The following libraries were imported and used in this project:
 
-- [Bootstrap](https://getbootstrap.com/): Used for styling and responsive design.
-- CSS: [https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css](https://stackpath.bootstrapcdn.com/bootstrap/4.3. 1/css/bootstrap.min.css)
-- jQuery: [https://code.jquery.com/jquery-3.6.0.min.js](https://code.jquery.com/jquery-3.6.0.min.js)
-- JavaScript: [https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js](https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js)
+Axios: https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js 
+Bootstrap CSS: https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css
+Bootstrap Script: https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js
+jQuery: https://code.jquery.com/jquery-3.3.1.slim.min.js
+Popper: https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js
