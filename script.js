@@ -170,7 +170,12 @@ const filterPokemonByType = async () => {
     filteredPokemon.push(...pokemons);
   }
 
-  pokemons = filteredPokemon; // Update the global pokemons array with the filtered data
+  const filteredPokemonWithinLimit = filteredPokemon.filter(pokemon => {
+    const pokemonNumber = parseInt(pokemon.url.split('/').slice(-2, -1)[0]);
+    return pokemonNumber <= 810;
+  });
+
+  pokemons = filteredPokemonWithinLimit; // Update the global pokemons array with the filtered data
 
   currentPage = 1; // Reset the current page to 1
   paginate(currentPage, PAGE_SIZE, pokemons);
