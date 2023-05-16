@@ -163,11 +163,28 @@ const filterPokemonByType = async () => {
     return this.id;
   }).get();
 
-  const filteredPokemon = [];
+  let filteredPokemon = [];
 
-  for (const type of checkedTypes) {
-    const pokemons = await fetchPokemonsByType(type);
-    filteredPokemon.push(...pokemons);
+  if (checkedTypes.length > 1) {
+    // Fetch the Pokémon for the first selected type
+    const pokemonsOfType1 = await fetchPokemonsByType(checkedTypes[0]);
+
+    // Filter the Pokémon that have the second selected type
+    filteredPokemon = pokemonsOfType1.filter(pokemon => {
+      for (const type of checkedTypes.slice(1)) {
+        if (!pokemon.types.some(pokemonType => pokemonType.type.name === type)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  } else if (checkedTypes.length === 1) {
+    // Only one type selected, fetch Pokémon for that type
+    filteredPokemon = await fetchPokemonsByType(checkedTypes[0]);
+  } else {
+    // No types selected, return the full list of 810 Pokémon
+    const response = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810');
+    filteredPokemon = response.data.results;
   }
 
   const filteredPokemonWithinLimit = filteredPokemon.filter(pokemon => {
