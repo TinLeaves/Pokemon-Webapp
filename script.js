@@ -166,23 +166,17 @@ const filterPokemonByType = async () => {
   let filteredPokemon = [];
 
   if (checkedTypes.length > 1) {
-    // Fetch the Pokémon for the first selected type
-    const pokemonsOfType1 = await fetchPokemonsByType(checkedTypes[0]);
-
-    // Filter the Pokémon that have the second selected type
-    filteredPokemon = pokemonsOfType1.filter(pokemon => {
-      for (const type of checkedTypes.slice(1)) {
-        if (!pokemon.types.some(pokemonType => pokemonType.type.name === type)) {
-          return false;
-        }
-      }
-      return true;
-    });
+    let allPokemonsOfType1 = await fetchPokemonsByType(checkedTypes[0]);
+    for (let i = 1; i < checkedTypes.length; i++) {
+      const pokemonsOfTypeI = await fetchPokemonsByType(checkedTypes[i]);
+      allPokemonsOfType1 = allPokemonsOfType1.filter(pokemon => {
+        return pokemonsOfTypeI.some(p => p.name === pokemon.name);
+      });
+    }
+    filteredPokemon = allPokemonsOfType1;
   } else if (checkedTypes.length === 1) {
-    // Only one type selected, fetch Pokémon for that type
     filteredPokemon = await fetchPokemonsByType(checkedTypes[0]);
   } else {
-    // No types selected, return the full list of 810 Pokémon
     const response = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810');
     filteredPokemon = response.data.results;
   }
@@ -192,13 +186,19 @@ const filterPokemonByType = async () => {
     return pokemonNumber <= 810;
   });
 
-  pokemons = filteredPokemonWithinLimit; // Update the global pokemons array with the filtered data
-
-  currentPage = 1; // Reset the current page to 1
+  pokemons = filteredPokemonWithinLimit;
+  currentPage = 1;
   paginate(currentPage, PAGE_SIZE, pokemons);
   const numPages = Math.ceil(pokemons.length / PAGE_SIZE);
   updatePaginationDiv(currentPage, numPages);
+
+  // Display a message if no Pokémon match the selected types
+  if (checkedTypes.length > 1 && filteredPokemonWithinLimit.length === 0) {
+    $('#pokeCards').html('<p>No Pokémon found with all the selected types.</p>');
+  }
 };
+
+
 
 
 const setup = async () => {
