@@ -3,6 +3,7 @@
 A web application that allows users to easily browse and access a comprehensive list of Pokemon. Users can filter the Pokemon by type, navigate through the list, and obtain detailed information about a particular Pokemon of interest.
 
 Video Demo: https://www.youtube.com/watch?v=hfm-nomlwww
+Deployed Link: https://verdant-pudding-878ba0.netlify.app/
 
 ## Features
  - View a comprehensive list of Pokemon
