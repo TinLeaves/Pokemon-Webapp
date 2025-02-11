@@ -1,4 +1,4 @@
-# COMP_2537_Assignment_3
+# Pokemon Webapp
 
 A web application that allows users to easily browse and access a comprehensive list of Pokemon. Users can filter the Pokemon by type, navigate through the list, and obtain detailed information about a particular Pokemon of interest.
 
